@@ -7,14 +7,19 @@
 	<RuntimeIdentifiers>win10-x64;osx.10.12-x64;debian.8-x64</RuntimeIdentifiers>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Copyright>Copyright 2022 (c) Daniel Valadas</Copyright>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DebugType>none</DebugType>
+    <DebugType>full</DebugType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DebugType>none</DebugType>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.9.1" />
+  </ItemGroup>
 
 </Project>
