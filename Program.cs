@@ -1,4 +1,6 @@
-﻿using System.Text.RegularExpressions;
+﻿using CommandLine;
+using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 
 namespace em_calibrator
 {
@@ -6,47 +8,41 @@ namespace em_calibrator
     {
         static void Main(string[] args)
         {
-            var filename = "";
-            if (args.Length == 0)
-            {
-                Console.WriteLine("Adjusts the from of the top infill gradually line per line between two values.");
-                Console.WriteLine();
-                Console.WriteLine("Note that this only works for a single object with a single top solid infill.");
-                Console.WriteLine("Usage: em_calibrator.exe somefile.gcode min max");
-                Console.WriteLine("Where min is the minimum and max is the maximum flow multiplier.");
-                Console.WriteLine();
-                Console.WriteLine("Enter the filename to process from 0.9 to 1.1 or press enter to exit.");
-
-                filename = Console.ReadLine();
-                if (string.IsNullOrWhiteSpace(filename))
+            Parser.Default.ParseArguments<Options>(args)
+                .WithParsed<Options>(options =>
                 {
-                    return;
-                }
-            }
-            else
+                    try
+                    {
+                        ProcessFile(options);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.Error.Write(ex.Message);
+                        throw;
+                    }
+                });
+        }
+
+        private static void ProcessFile(Options options)
+        {
+            if (options.Verbose)
             {
-                filename = args[0];
+                Console.WriteLine($"Parsing Input file: {options.InputFile}");
             }
 
-            double min = 0.8;
-            if (args.Length > 1)
+            var lines = File.ReadAllLines(options.InputFile);
+            if (options.Verbose)
             {
-                min = double.Parse(args[1]);
-            }
-            double max = 1.2;
-            if (args.Length > 2)
-            {
-                max = double.Parse(args[2]);
+                Console.WriteLine($"Processing {lines.Length} lines");
             }
 
-            var lines = File.ReadAllLines(filename);
             List<string> newLines = new List<string>();
             var passedTopLayer = false;
             var linesToProcess = new List<string>();
             foreach (var line in lines)
             {
-                if (line.Contains(";TYPE:Top solid infill"))
-                    {
+                if (!passedTopLayer && line.Contains(";TYPE:Top solid infill"))
+                {
                     passedTopLayer = true;
                 }
 
@@ -59,7 +55,16 @@ namespace em_calibrator
                 linesToProcess.Add(line);
             }
 
-            var moves = linesToProcess.Count(l => l.Contains("G1"));
+            if (options.Verbose)
+            {
+                Console.WriteLine($"Processing {linesToProcess.Count} moves for the top layer infill.");
+            }
+
+            var linesWithPrintMoves = linesToProcess.Count(l =>
+                l.Contains("G1")
+                && l.Contains("E")
+                && !l.Contains("E-"));
+            var currentLine = 1;
             for (int i = 0; i < linesToProcess.Count; i++)
             {
                 var line = linesToProcess[i];
@@ -68,12 +73,18 @@ namespace em_calibrator
                     && line.Contains("E")
                     && !line.Contains("E-"))
                 {
-                    var multiplier = min + (max - min) * (i / (double)moves);
+                    var multiplier = (options.MinFlow + (options.MaxFlow - options.MinFlow) * (currentLine / (double)linesWithPrintMoves)) / 100;
+                    currentLine++;
                     var regex = new Regex(@"E(\d)+\.(\d)+");
                     var eString = regex.Match(line).Value.Substring(1);
                     double originalValue = double.Parse(eString);
                     double adjustedValue = originalValue * multiplier;
                     var newLine = regex.Replace(line, $"E{adjustedValue.ToString("0.00000")}");
+                    newLine = $"{newLine} ;Flow adjsuted from {originalValue} to {adjustedValue.ToString("0.00000")} with multiplier {multiplier}";
+                    if (options.Verbose)
+                    {
+                        Console.WriteLine(newLine);
+                    }
                     newLines.Add(newLine);
                 }
                 else
@@ -82,7 +93,21 @@ namespace em_calibrator
                 }
             }
 
-            File.WriteAllLines(filename, newLines);
+            if (string.IsNullOrWhiteSpace(options.OutputFile))
+            {
+                options.OutputFile = options.InputFile;
+            }
+
+            var outFile = new FileInfo(options.OutputFile);
+            if (
+                outFile != null
+                && outFile.Directory != null
+                && !outFile.Directory.Exists)
+            {
+                outFile.Directory.Create();
+            }
+
+            File.WriteAllLines(options.OutputFile, newLines);
         }
     }
 }
