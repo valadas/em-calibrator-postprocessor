@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "em-calibrator": {
+      "commandName": "Project",
+      "commandLineArgs": "--verbose --min-flow 50 --max-flow 150 --output-file ..\\..\\..\\samples\\results\\output.gcode --input-file ..\\..\\..\\samples\\patch.gcode"
+    }
+  }
+}
