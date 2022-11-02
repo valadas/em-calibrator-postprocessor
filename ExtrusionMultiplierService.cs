@@ -111,7 +111,7 @@ namespace Calibrator
                         double originalValue = double.Parse(eString, CultureInfo.InvariantCulture);
                         double adjustedValue = originalValue * multiplier;
                         var newLine = regex.Replace(line, $"E{adjustedValue.ToString("0.00000", CultureInfo.InvariantCulture)}");
-                        newLine = $"{newLine} ;Flow adjusted from {originalValue} to {adjustedValue.ToString("0.00000", CultureInfo.InvariantCulture)} with multiplier {multiplier.ToString("0.00000", CultureInfo.InvariantCulture)}";
+                        newLine = $"{newLine} ;Flow adjusted from {originalValue.ToString("0.00000", CultureInfo.InvariantCulture)} to {adjustedValue.ToString("0.00000", CultureInfo.InvariantCulture)} with multiplier {multiplier.ToString("0.00000", CultureInfo.InvariantCulture)}";
                         this.logger.Verbose(newLine);
                         newLines.Add(newLine);
                     }
