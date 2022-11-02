@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>em_calibrator</RootNamespace>
-	<RuntimeIdentifiers>win10-x64;osx.10.12-x64;debian.8-x64</RuntimeIdentifiers>
+	<RuntimeIdentifiers>win-x64;win10-x64;osx.10.12-x64;debian.8-x64</RuntimeIdentifiers>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Copyright>Copyright 2022 (c) Daniel Valadas</Copyright>
@@ -17,6 +17,15 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DebugType>none</DebugType>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="artifacts\**" />
+    <Compile Remove="build\**" />
+    <EmbeddedResource Remove="artifacts\**" />
+    <EmbeddedResource Remove="build\**" />
+    <None Remove="artifacts\**" />
+    <None Remove="build\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.9.1" />

@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "_build": {
+      "commandName": "Project"
+    },
+    "Publish": {
+      "commandName": "Project",
+      "commandLineArgs": "--target Publish"
+    }
+  }
+}

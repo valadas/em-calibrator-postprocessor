@@ -5,12 +5,16 @@ VisualStudioVersion = 17.3.32804.467
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "em-calibrator", "em-calibrator.csproj", "{63F51118-44BA-4EC2-9732-2927C634EB73}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{7C90297A-C4BA-4B7B-9C58-4B7A3E1FA062}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7C90297A-C4BA-4B7B-9C58-4B7A3E1FA062}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C90297A-C4BA-4B7B-9C58-4B7A3E1FA062}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63F51118-44BA-4EC2-9732-2927C634EB73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{63F51118-44BA-4EC2-9732-2927C634EB73}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63F51118-44BA-4EC2-9732-2927C634EB73}.Release|Any CPU.ActiveCfg = Release|Any CPU
