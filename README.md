@@ -15,7 +15,7 @@ There is no installer for this post-processor, it consists of a single file comm
 1. In the terminal execute the tool `em-calibrator.exe` in Windows or `./em-calibrator` on Mac or Linux.
 2. An help message will indicate how the tool works
 ```
-em-calibrator 1.0.0
+em-calibrator
 Copyright 2022 (c) Daniel Valadas
 
 ERROR(S):
