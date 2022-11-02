@@ -235,7 +235,7 @@ class Build : NukeBuild
             }
 
             // Close milestone
-            Repository.CloseGitHubMilestone(milestone.Title).Wait();
+            Repository.CloseGitHubMilestone(milestone.Title, false).Wait();
             Serilog.Log.Information($"Milestone {milestone.Title} closed !");
         });
 }
