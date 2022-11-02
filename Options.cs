@@ -1,6 +1,6 @@
 ﻿using CommandLine;
 
-namespace em_calibrator
+namespace Calibrator
 {
     public class Options
     {
@@ -37,5 +37,12 @@ namespace em_calibrator
             Required = false,
             HelpText = "Output file to be written.")]
         public string OutputFile { get; set; } = "";
+
+        [Option(
+            'a',
+            "all-layers",
+            Required = false,
+            HelpText = "Process all layers, not just the top solid infill.")]
+        public bool AllLayers { get; set; } = false;
     }
 }
