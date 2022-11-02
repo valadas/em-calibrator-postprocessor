@@ -32,4 +32,4 @@ jobs:
             ~/.nuget/packages
           key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj') }}
       - name: Run './build.cmd Publish'
-        run: ./build.cmd Publish
+        run: ./build.cmd Publish --verbosity verbose
