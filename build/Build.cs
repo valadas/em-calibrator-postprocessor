@@ -241,15 +241,16 @@ class Build : NukeBuild
             var releaseDirectory = ArtifactsDirectory / "release";
             foreach (var releaseFile in releaseDirectory.GlobFiles("*.zip"))
             {
-                GitHubTasks.GitHubClient.Repository.Release.UploadAsset(
+                var asset = GitHubTasks.GitHubClient.Repository.Release.UploadAsset(
                     release,
                     new ReleaseAssetUpload
                     {
                         ContentType = "application/zip",
                         FileName = releaseFile.Name,
                         RawData = File.OpenRead(releaseFile),
-                    });
-                Serilog.Log.Information($"{releaseFile.Name} uploaded !");
+                    })
+                .Result;
+                Serilog.Log.Information($"{asset.Name} uploaded at {asset.BrowserDownloadUrl}");
             }
 
             // Close milestone
