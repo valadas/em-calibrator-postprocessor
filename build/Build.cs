@@ -203,6 +203,7 @@ class Build : NukeBuild
             Serilog.Log.Information(releaseNotesBuilder.ToString());
 
             var tag = Repository.IsOnMainOrMasterBranch() ? GitVersion.MajorMinorPatch : GitVersion.SemVer;
+            GitLogger = (type, output) => Serilog.Log.Information(output);
             Git($"tag {tag}");
             Git("push --tags");
 
@@ -221,7 +222,7 @@ class Build : NukeBuild
 
             // Upload assets
             var releaseDirectory = ArtifactsDirectory / "release";
-            foreach (var releaseFile in releaseDirectory.GlobFiles())
+            foreach (var releaseFile in releaseDirectory.GlobFiles("*.zip"))
             {
                 GitHubTasks.GitHubClient.Repository.Release.UploadAsset(
                     release,
