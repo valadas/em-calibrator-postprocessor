@@ -44,7 +44,15 @@ class Build : NukeBuild
 
     AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
 
+    Target LogInformation => _ => _
+    .Executes(() =>
+    {
+        Serilog.Log.Information("GitVersion: {0}", GitVersion.MajorMinorPatch);
+        Serilog.Log.Information("GitRepository: {0}", SerializationTasks.JsonSerialize(GitRepository));
+    });
+
     Target Clean => _ => _
+        .DependsOn(LogInformation)
         .Before(Restore)
         .Executes(() =>
         {

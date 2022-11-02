@@ -74,6 +74,7 @@
             "enum": [
               "Clean",
               "Compile",
+              "LogInformation",
               "Publish",
               "PublishLinux",
               "PublishMac",
@@ -94,6 +95,7 @@
             "enum": [
               "Clean",
               "Compile",
+              "LogInformation",
               "Publish",
               "PublishLinux",
               "PublishMac",
