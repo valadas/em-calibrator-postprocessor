@@ -171,19 +171,19 @@ class Build : NukeBuild
                 Serilog.Log.Warning($"Milestones {GitVersion.MajorMinorPatch} not found, release notes will be empty.");
             }
 
-            var prs = GitHubTasks.GitHubClient.PullRequest.GetAllForRepository(
-                Repository.GetGitHubOwner(),
-                Repository.GetGitHubName(),
-                new PullRequestRequest
-                {
-                    State = ItemStateFilter.Closed,
-                    SortProperty = PullRequestSort.Updated,
-                    SortDirection = SortDirection.Descending,
-                })
-            .Result
-            .Where(pr =>
-                pr.Merged == true &&
-                milestone?.Title == GitVersion.MajorMinorPatch);
+        var prs = GitHubTasks.GitHubClient.PullRequest.GetAllForRepository(
+            Repository.GetGitHubOwner(),
+            Repository.GetGitHubName(),
+            new PullRequestRequest
+            {
+                State = ItemStateFilter.Closed,
+                SortProperty = PullRequestSort.Updated,
+                SortDirection = SortDirection.Descending,
+            })
+        .Result
+        .Where(pr =>
+            pr.Merged == true &&
+            pr.Milestone?.Title == GitVersion.MajorMinorPatch);
 
             // Build release notes
             var releaseNotesBuilder = new StringBuilder();
