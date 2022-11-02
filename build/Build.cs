@@ -22,9 +22,8 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
     "publish",
     GitHubActionsImage.UbuntuLatest,
     On = new[] { GitHubActionsTrigger.Push },
-    InvokedTargets = new[] { nameof(Publish) })]
-
-
+    InvokedTargets = new[] { nameof(Publish) },
+    FetchDepth = 0)]
 class Build : NukeBuild
 {
     /// Support plugins are available for:
