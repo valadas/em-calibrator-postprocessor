@@ -91,21 +91,36 @@ namespace Calibrator
             for (int i = 0; i < infillLines.Count; i++)
             {
                 var line = infillLines[i];
+                var lineWithoutComment = line.Split(';')[0];
+                if (line is null || string.IsNullOrWhiteSpace(line))
+                {
+                    continue;
+                }
                 if (
-                    line.Contains("G1")
-                    && line.Contains("E")
-                    && !line.Contains("E-"))
+                    lineWithoutComment.Contains("G1")
+                    && lineWithoutComment.Contains("E")
+                    && !lineWithoutComment.Contains("E-"))
                 {
                     var multiplier = (options.MinFlow + (options.MaxFlow - options.MinFlow) * (currentLine / (double)printMovesCount)) / 100;
                     currentLine++;
                     var regex = new Regex(@"E(\d)+\.(\d)+");
-                    var eString = regex.Match(line).Value.Substring(1);
-                    double originalValue = double.Parse(eString);
-                    double adjustedValue = originalValue * multiplier;
-                    var newLine = regex.Replace(line, $"E{adjustedValue.ToString("0.00000")}");
-                    newLine = $"{newLine} ;Flow adjsuted from {originalValue} to {adjustedValue.ToString("0.00000")} with multiplier {multiplier.ToString("0.00000")}";
-                    this.logger.Verbose(newLine);
-                    newLines.Add(newLine);
+                    try
+                    {
+                        var eString = regex.Match(line).Value.Substring(1);
+                        double originalValue = double.Parse(eString);
+                        double adjustedValue = originalValue * multiplier;
+                        var newLine = regex.Replace(line, $"E{adjustedValue.ToString("0.00000")}");
+                        newLine = $"{newLine} ;Flow adjsuted from {originalValue} to {adjustedValue.ToString("0.00000")} with multiplier {multiplier.ToString("0.00000")}";
+                        this.logger.Verbose(newLine);
+                        newLines.Add(newLine);
+                    }
+                    catch (Exception)
+                    {
+                        Console.Error.WriteLine(i);
+                        Console.Error.WriteLine(infillLines);
+                        Console.Error.WriteLine(infillLines[i]);
+                        throw;
+                    }
                 }
                 else
                 {
