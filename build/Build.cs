@@ -161,6 +161,7 @@ class Build : NukeBuild
 
     Target Publish => _ => _
         .DependsOn(PublishMac, PublishLinux, PublishWindows)
+        .Produces(ArtifactsDirectory)
         .Executes(() =>
         {
             var version = GitVersion.MajorMinorPatch;
@@ -169,6 +170,12 @@ class Build : NukeBuild
             CompressZip(ArtifactsDirectory / "linux", ArtifactsDirectory / "release" / $"em-calibrator-linux_{version}.zip");
             CompressZip(ArtifactsDirectory / "win", ArtifactsDirectory / "release" / $"em-calibrator-win_{version}.zip");
 
+            if (!Repository.IsOnReleaseBranch() && !Repository.IsOnMainOrMasterBranch())
+            {
+                Serilog.Log.Information("Not on release branch, skipping GitHub release");
+                return;
+            }
+            
             var credentials = new Credentials(GitHubActions.Instance.Token);
             GitHubTasks.GitHubClient = new GitHubClient(
                 new ProductHeaderValue(nameof(NukeBuild)),
