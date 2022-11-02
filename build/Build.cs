@@ -10,7 +10,7 @@ using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
-using Nuke.Common.Tools.GitVersion;
+// using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Utilities.Collections;
 using static Nuke.Common.EnvironmentInfo;
 using static Nuke.Common.IO.FileSystemTasks;
@@ -40,14 +40,14 @@ class Build : NukeBuild
 
     [Solution] readonly Solution Solution;
     [GitRepository] readonly GitRepository GitRepository;
-    [GitVersion(Framework = "net5.0", UpdateAssemblyInfo = false, NoFetch = true)] readonly GitVersion GitVersion;
+    // [GitVersion(Framework = "net5.0", UpdateAssemblyInfo = false, NoFetch = true)] readonly GitVersion GitVersion;
 
     AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
 
     Target LogInformation => _ => _
     .Executes(() =>
     {
-        Serilog.Log.Information("GitVersion: {0}", GitVersion.MajorMinorPatch);
+        // Serilog.Log.Information("GitVersion: {0}", GitVersion.MajorMinorPatch);
         Serilog.Log.Information("GitRepository: {0}", SerializationTasks.JsonSerialize(GitRepository));
     });
 
@@ -74,9 +74,9 @@ class Build : NukeBuild
             DotNetBuild(s => s
                 .SetProjectFile(Solution)
                 .SetConfiguration(Configuration)
-                .SetAssemblyVersion(GitVersion.AssemblySemVer)
-                .SetFileVersion(GitVersion.AssemblySemFileVer)
-                .SetInformationalVersion(GitVersion.InformationalVersion)
+                //.SetAssemblyVersion(GitVersion.AssemblySemVer)
+                //.SetFileVersion(GitVersion.AssemblySemFileVer)
+                //.SetInformationalVersion(GitVersion.InformationalVersion)
                 .EnableNoRestore());
         });
 
