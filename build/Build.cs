@@ -170,7 +170,8 @@ class Build : NukeBuild
             CompressZip(ArtifactsDirectory / "linux", ArtifactsDirectory / "release" / $"em-calibrator-linux_{version}.zip");
             CompressZip(ArtifactsDirectory / "win", ArtifactsDirectory / "release" / $"em-calibrator-win_{version}.zip");
 
-            if (!Repository.IsOnReleaseBranch() && !Repository.IsOnMainOrMasterBranch())
+            if ((!Repository.IsOnReleaseBranch() && !Repository.IsOnMainOrMasterBranch()) ||
+                Repository.IsOnDevelopBranch())
             {
                 Serilog.Log.Information("Not on release branch, skipping GitHub release");
                 return;
