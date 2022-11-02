@@ -1,4 +1,5 @@
 ﻿using Serilog;
+using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -107,7 +108,7 @@ namespace Calibrator
                     try
                     {
                         var eString = regex.Match(line).Value.Substring(1);
-                        double originalValue = double.Parse(eString);
+                        double originalValue = double.Parse(eString, CultureInfo.InvariantCulture);
                         double adjustedValue = originalValue * multiplier;
                         var newLine = regex.Replace(line, $"E{adjustedValue.ToString("0.00000")}");
                         newLine = $"{newLine} ;Flow adjsuted from {originalValue} to {adjustedValue.ToString("0.00000")} with multiplier {multiplier.ToString("0.00000")}";
