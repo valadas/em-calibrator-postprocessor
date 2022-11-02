@@ -101,6 +101,7 @@ class Build : NukeBuild
                 .SetProject(Solution.GetProject("em-calibrator"))
                 .EnablePublishSingleFile()
                 .EnableSelfContained()
+                .SetRuntime("osx.10.12-x64")
                 .SetOutput(ArtifactsDirectory / "mac"));
 
             if (IsUnix)
@@ -127,6 +128,7 @@ class Build : NukeBuild
                 .SetProject(Solution.GetProject("em-calibrator"))
                 .EnablePublishSingleFile()
                 .EnableSelfContained()
+                .SetRuntime("linux-x64")
                 .SetOutput(ArtifactsDirectory / "linux"));
 
             if (IsUnix)
@@ -153,6 +155,7 @@ class Build : NukeBuild
                 .SetProject(Solution.GetProject("em-calibrator"))
                 .EnablePublishSingleFile()
                 .EnableSelfContained()
+                .SetRuntime("win-x64")
                 .SetOutput(ArtifactsDirectory / "win"));
         });
 
