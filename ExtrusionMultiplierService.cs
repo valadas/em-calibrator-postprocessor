@@ -28,6 +28,7 @@ namespace Calibrator
 
             for (int i = 0; i < layers.Length; i++)
             {
+                var isLastLayer = i == layers.Length - 1;
                 var layer = layers[i];
                 if (i == 0)
                 {
@@ -35,7 +36,7 @@ namespace Calibrator
                     continue;
                 }
                 
-                if (!options.AllLayers && !layer.Contains(";TYPE:Top solid infill"))
+                if (!options.AllLayers && !isLastLayer)
                 {
                     result.Append(layer);
                     continue;
@@ -57,7 +58,7 @@ namespace Calibrator
             for (int i = 0; i < lines.Length; i++)
             {
                 var line = lines[i];
-                if (line.Contains(";TYPE") && line.Contains("infill", StringComparison.OrdinalIgnoreCase))
+                if (line.Contains(";TYPE") && (line.Contains("infill", StringComparison.OrdinalIgnoreCase) || line.Contains("top surface", StringComparison.OrdinalIgnoreCase)))
                 {
                     passedInfill = true;
                 }
@@ -104,7 +105,7 @@ namespace Calibrator
                 {
                     var multiplier = (options.MinFlow + (options.MaxFlow - options.MinFlow) * (currentLine / (double)printMovesCount)) / 100;
                     currentLine++;
-                    var regex = new Regex(@"E(\d)+\.(\d)+");
+                    var regex = new Regex(@"E(\d)*?\.(\d)+");
                     try
                     {
                         var eString = regex.Match(line).Value.Substring(1);
@@ -115,11 +116,12 @@ namespace Calibrator
                         this.logger.Verbose(newLine);
                         newLines.Add(newLine);
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         Console.Error.WriteLine(i);
                         Console.Error.WriteLine(infillLines);
                         Console.Error.WriteLine(infillLines[i]);
+                        Console.Error.WriteLine(ex.Message);
                         throw;
                     }
                 }
