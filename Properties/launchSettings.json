@@ -1,8 +1,12 @@
 {
   "profiles": {
-    "em-calibrator": {
+    "super-slicer": {
       "commandName": "Project",
-      "commandLineArgs": "--verbose --min-flow 50 --max-flow 150 --output-file ..\\..\\..\\samples\\results\\output.gcode --input-file ..\\..\\..\\samples\\patch.gcode"
+      "commandLineArgs": "--verbose --min-flow 50 --max-flow 150 --output-file ..\\..\\..\\samples\\results\\output.gcode --input-file ..\\..\\..\\samples\\super-slicer.gcode"
+    },
+    "orca-slicer": {
+      "commandName": "Project",
+      "commandLineArgs": "--verbose --min-flow 90 --max-flow 104 --output-file ..\\..\\..\\samples\\results\\output.gcode --input-file ..\\..\\..\\samples\\orca-slicer.gcode"
     }
   }
 }
